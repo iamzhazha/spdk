@@ -1,0 +1,607 @@
+cmake_minimum_required(VERSION 3.20)
+project(spdk)
+
+set(CMAKE_CXX_STANDARD 14)
+
+include_directories(include)
+include_directories(include/linux)
+include_directories(include/spdk)
+include_directories(include/spdk_internal)
+include_directories(lib/bdev)
+include_directories(lib/blob)
+include_directories(lib/blobfs)
+include_directories(lib/env_dpdk)
+include_directories(lib/env_ocf)
+include_directories(lib/ftl)
+include_directories(lib/ioat)
+include_directories(lib/iscsi)
+include_directories(lib/jsonrpc)
+include_directories(lib/nbd)
+include_directories(lib/net)
+include_directories(lib/nvme)
+include_directories(lib/nvmf)
+include_directories(lib/rte_vhost)
+include_directories(lib/scsi)
+include_directories(lib/vhost)
+include_directories(lib/virtio/virtio_user)
+include_directories(lib/vmd)
+include_directories(module/bdev/aio)
+include_directories(module/bdev/compress)
+include_directories(module/bdev/crypto)
+include_directories(module/bdev/delay)
+include_directories(module/bdev/error)
+include_directories(module/bdev/ftl)
+include_directories(module/bdev/gpt)
+include_directories(module/bdev/iscsi)
+include_directories(module/bdev/lvol)
+include_directories(module/bdev/malloc)
+include_directories(module/bdev/null)
+include_directories(module/bdev/nvme)
+include_directories(module/bdev/ocf)
+include_directories(module/bdev/passthru)
+include_directories(module/bdev/pmem)
+include_directories(module/bdev/raid)
+include_directories(module/bdev/rbd)
+include_directories(module/bdev/split)
+include_directories(module/bdev/uring)
+include_directories(module/bdev/virtio)
+include_directories(module/bdev/zone_block)
+include_directories(module/blobfs/bdev)
+include_directories(module/copy/ioat)
+include_directories(module/event/subsystems/nvmf)
+include_directories(module/event/subsystems/vmd)
+include_directories(test)
+include_directories(test/app/fuzz/common)
+include_directories(test/app/fuzz/vhost_fuzz)
+include_directories(test/common/lib/nvme)
+include_directories(test/unit/include)
+
+add_subdirectory(dpdk)
+
+add_executable(spdk
+        app/iscsi_tgt/iscsi_tgt.c
+        app/iscsi_top/iscsi_top.cpp
+        app/nvmf_tgt/nvmf_main.c
+        app/spdk_lspci/spdk_lspci.c
+        app/spdk_tgt/spdk_tgt.c
+        app/trace/trace.cpp
+        app/trace_record/trace_record.c
+        app/vhost/vhost.c
+        examples/bdev/fio_plugin/fio_plugin.c
+        examples/bdev/hello_world/hello_bdev.c
+        examples/blob/cli/blobcli.c
+        examples/blob/hello_world/hello_blob.c
+        examples/ioat/perf/perf.c
+        examples/ioat/verify/verify.c
+        examples/nvme/arbitration/arbitration.c
+        examples/nvme/cmb_copy/cmb_copy.c
+        examples/nvme/fio_plugin/fio_plugin.c
+        examples/nvme/hello_world/hello_world.c
+        examples/nvme/hotplug/hotplug.c
+        examples/nvme/identify/identify.c
+        examples/nvme/nvme_manage/nvme_manage.c
+        examples/nvme/perf/perf.c
+        examples/nvme/reconnect/reconnect.c
+        examples/nvme/reserve/reserve.c
+        examples/nvmf/nvmf/nvmf.c
+        examples/sock/hello_world/hello_sock.c
+        examples/vmd/led/led.c
+        examples/vmd/lsvmd/lsvmd.c
+        include/linux/virtio_blk.h
+        include/linux/virtio_config.h
+        include/linux/virtio_pci.h
+        include/linux/virtio_ring.h
+        include/linux/virtio_scsi.h
+        include/linux/virtio_types.h
+        include/spdk/assert.h
+        include/spdk/barrier.h
+        include/spdk/base64.h
+        include/spdk/bdev.h
+        include/spdk/bdev_module.h
+        include/spdk/bdev_zone.h
+        include/spdk/bit_array.h
+        include/spdk/blob.h
+        include/spdk/blob_bdev.h
+        include/spdk/blobfs.h
+        include/spdk/blobfs_bdev.h
+        include/spdk/conf.h
+        include/spdk/copy_engine.h
+        include/spdk/cpuset.h
+        include/spdk/crc16.h
+        include/spdk/crc32.h
+        include/spdk/dif.h
+        include/spdk/endian.h
+        include/spdk/env.h
+        include/spdk/env_dpdk.h
+        include/spdk/event.h
+        include/spdk/fd.h
+        include/spdk/file.h
+        include/spdk/ftl.h
+        include/spdk/gpt_spec.h
+        include/spdk/histogram_data.h
+        include/spdk/io_channel.h
+        include/spdk/ioat.h
+        include/spdk/ioat_spec.h
+        include/spdk/iscsi_spec.h
+        include/spdk/json.h
+        include/spdk/jsonrpc.h
+        include/spdk/likely.h
+        include/spdk/log.h
+        include/spdk/lvol.h
+        include/spdk/mmio.h
+        include/spdk/nbd.h
+        include/spdk/net.h
+        include/spdk/notify.h
+        include/spdk/nvme.h
+        include/spdk/nvme_intel.h
+        include/spdk/nvme_ocssd.h
+        include/spdk/nvme_ocssd_spec.h
+        include/spdk/nvme_spec.h
+        include/spdk/nvmf.h
+        include/spdk/nvmf_fc_spec.h
+        include/spdk/nvmf_spec.h
+        include/spdk/opal.h
+        include/spdk/opal_spec.h
+        include/spdk/pci_ids.h
+        include/spdk/pipe.h
+        include/spdk/queue.h
+        include/spdk/queue_extras.h
+        include/spdk/reduce.h
+        include/spdk/rpc.h
+        include/spdk/scsi.h
+        include/spdk/scsi_spec.h
+        include/spdk/sock.h
+        include/spdk/stdinc.h
+        include/spdk/string.h
+        include/spdk/thread.h
+        include/spdk/trace.h
+        include/spdk/util.h
+        include/spdk/uuid.h
+        include/spdk/version.h
+        include/spdk/vhost.h
+        include/spdk/vmd.h
+        include/spdk_internal/assert.h
+        include/spdk_internal/copy_engine.h
+        include/spdk_internal/event.h
+        include/spdk_internal/log.h
+        include/spdk_internal/lvolstore.h
+        include/spdk_internal/memory.h
+        include/spdk_internal/mock.h
+        include/spdk_internal/nvme_tcp.h
+        include/spdk_internal/nvmf.h
+        include/spdk_internal/sock.h
+        include/spdk_internal/thread.h
+        include/spdk_internal/uring.h
+        include/spdk_internal/utf.h
+        include/spdk_internal/vhost_user.h
+        include/spdk_internal/virtio.h
+        lib/bdev/bdev.c
+        lib/bdev/bdev_internal.h
+        lib/bdev/bdev_rpc.c
+        lib/bdev/bdev_zone.c
+        lib/bdev/part.c
+        lib/bdev/scsi_nvme.c
+        lib/bdev/vtune.c
+        lib/blob/blob_bs_dev.c
+        lib/blob/blobstore.c
+        lib/blob/blobstore.h
+        lib/blob/request.c
+        lib/blob/request.h
+        lib/blob/zeroes.c
+        lib/blobfs/blobfs.c
+        lib/blobfs/tree.c
+        lib/blobfs/tree.h
+        lib/conf/conf.c
+        lib/copy/copy_engine.c
+        lib/env_dpdk/env.c
+        lib/env_dpdk/env_internal.h
+        lib/env_dpdk/init.c
+        lib/env_dpdk/memory.c
+        lib/env_dpdk/pci.c
+        lib/env_dpdk/pci_ioat.c
+        lib/env_dpdk/pci_nvme.c
+        lib/env_dpdk/pci_virtio.c
+        lib/env_dpdk/pci_vmd.c
+        lib/env_dpdk/threads.c
+        lib/env_ocf/ocf_env.c
+        lib/env_ocf/ocf_env.h
+        lib/env_ocf/ocf_env_headers.h
+        lib/env_ocf/ocf_env_list.h
+        lib/event/app.c
+        lib/event/json_config.c
+        lib/event/reactor.c
+        lib/event/rpc.c
+        lib/event/subsystem.c
+        lib/ftl/ftl_addr.h
+        lib/ftl/ftl_band.c
+        lib/ftl/ftl_band.h
+        lib/ftl/ftl_core.c
+        lib/ftl/ftl_core.h
+        lib/ftl/ftl_debug.c
+        lib/ftl/ftl_debug.h
+        lib/ftl/ftl_init.c
+        lib/ftl/ftl_io.c
+        lib/ftl/ftl_io.h
+        lib/ftl/ftl_reloc.c
+        lib/ftl/ftl_reloc.h
+        lib/ftl/ftl_restore.c
+        lib/ftl/ftl_rwb.c
+        lib/ftl/ftl_rwb.h
+        lib/ftl/ftl_trace.c
+        lib/ftl/ftl_trace.h
+        lib/ioat/ioat.c
+        lib/ioat/ioat_internal.h
+        lib/iscsi/conn.c
+        lib/iscsi/conn.h
+        lib/iscsi/init_grp.c
+        lib/iscsi/init_grp.h
+        lib/iscsi/iscsi.c
+        lib/iscsi/iscsi.h
+        lib/iscsi/iscsi_rpc.c
+        lib/iscsi/iscsi_subsystem.c
+        lib/iscsi/md5.c
+        lib/iscsi/md5.h
+        lib/iscsi/param.c
+        lib/iscsi/param.h
+        lib/iscsi/portal_grp.c
+        lib/iscsi/portal_grp.h
+        lib/iscsi/task.c
+        lib/iscsi/task.h
+        lib/iscsi/tgt_node.c
+        lib/iscsi/tgt_node.h
+        lib/json/json_parse.c
+        lib/json/json_util.c
+        lib/json/json_write.c
+        lib/jsonrpc/jsonrpc_client.c
+        lib/jsonrpc/jsonrpc_client_tcp.c
+        lib/jsonrpc/jsonrpc_internal.h
+        lib/jsonrpc/jsonrpc_server.c
+        lib/jsonrpc/jsonrpc_server_tcp.c
+        lib/log/log.c
+        lib/log/log_flags.c
+        lib/log_rpc/log_rpc.c
+        lib/lvol/lvol.c
+        lib/nbd/nbd.c
+        lib/nbd/nbd_internal.h
+        lib/nbd/nbd_rpc.c
+        lib/net/interface.c
+        lib/net/net_internal.h
+        lib/net/net_rpc.c
+        lib/notify/notify.c
+        lib/notify/notify_rpc.c
+        lib/nvme/nvme.c
+        lib/nvme/nvme_ctrlr.c
+        lib/nvme/nvme_ctrlr_cmd.c
+        lib/nvme/nvme_ctrlr_ocssd_cmd.c
+        lib/nvme/nvme_cuse.c
+        lib/nvme/nvme_cuse.h
+        lib/nvme/nvme_fabric.c
+        lib/nvme/nvme_internal.h
+        lib/nvme/nvme_io_msg.c
+        lib/nvme/nvme_io_msg.h
+        lib/nvme/nvme_ns.c
+        lib/nvme/nvme_ns_cmd.c
+        lib/nvme/nvme_ns_ocssd_cmd.c
+        lib/nvme/nvme_opal.c
+        lib/nvme/nvme_opal_internal.h
+        lib/nvme/nvme_pcie.c
+        lib/nvme/nvme_qpair.c
+        lib/nvme/nvme_quirks.c
+        lib/nvme/nvme_rdma.c
+        lib/nvme/nvme_tcp.c
+        lib/nvme/nvme_transport.c
+        lib/nvme/nvme_uevent.c
+        lib/nvme/nvme_uevent.h
+        lib/nvmf/ctrlr.c
+        lib/nvmf/ctrlr_bdev.c
+        lib/nvmf/ctrlr_discovery.c
+        lib/nvmf/custom_cmd_hdlr.c
+        lib/nvmf/fc.c
+        lib/nvmf/fc_ls.c
+        lib/nvmf/nvmf.c
+        lib/nvmf/nvmf_fc.h
+        lib/nvmf/nvmf_internal.h
+        lib/nvmf/nvmf_rpc.c
+        lib/nvmf/rdma.c
+        lib/nvmf/subsystem.c
+        lib/nvmf/tcp.c
+        lib/nvmf/transport.c
+        lib/nvmf/transport.h
+        lib/reduce/reduce.c
+        lib/rocksdb/env_spdk.cc
+        lib/rpc/rpc.c
+        lib/rte_vhost/fd_man.c
+        lib/rte_vhost/fd_man.h
+        lib/rte_vhost/rte_vhost.h
+        lib/rte_vhost/socket.c
+        lib/rte_vhost/vhost.c
+        lib/rte_vhost/vhost.h
+        lib/rte_vhost/vhost_user.c
+        lib/rte_vhost/vhost_user.h
+        lib/scsi/dev.c
+        lib/scsi/lun.c
+        lib/scsi/port.c
+        lib/scsi/scsi.c
+        lib/scsi/scsi_bdev.c
+        lib/scsi/scsi_internal.h
+        lib/scsi/scsi_pr.c
+        lib/scsi/scsi_rpc.c
+        lib/scsi/task.c
+        lib/sock/net_framework.c
+        lib/sock/sock.c
+        lib/thread/thread.c
+        lib/trace/trace.c
+        lib/trace/trace_flags.c
+        lib/trace/trace_rpc.c
+        lib/ut_mock/mock.c
+        lib/util/base64.c
+        lib/util/base64_neon.c
+        lib/util/bit_array.c
+        lib/util/cpuset.c
+        lib/util/crc16.c
+        lib/util/crc32.c
+        lib/util/crc32_ieee.c
+        lib/util/crc32c.c
+        lib/util/dif.c
+        lib/util/fd.c
+        lib/util/file.c
+        lib/util/iov.c
+        lib/util/math.c
+        lib/util/pipe.c
+        lib/util/strerror_tls.c
+        lib/util/string.c
+        lib/util/uuid.c
+        lib/vhost/rte_vhost_compat.c
+        lib/vhost/vhost.c
+        lib/vhost/vhost_blk.c
+        lib/vhost/vhost_internal.h
+        lib/vhost/vhost_nvme.c
+        lib/vhost/vhost_rpc.c
+        lib/vhost/vhost_scsi.c
+        lib/virtio/virtio_user/vhost.h
+        lib/virtio/virtio_user/vhost_user.c
+        lib/virtio/virtio.c
+        lib/virtio/virtio_pci.c
+        lib/virtio/virtio_user.c
+        lib/vmd/led.c
+        lib/vmd/vmd.c
+        lib/vmd/vmd.h
+        lib/vmd/vmd_spec.h
+        module/bdev/aio/bdev_aio.c
+        module/bdev/aio/bdev_aio.h
+        module/bdev/aio/bdev_aio_rpc.c
+        module/bdev/compress/vbdev_compress.c
+        module/bdev/compress/vbdev_compress.h
+        module/bdev/compress/vbdev_compress_rpc.c
+        module/bdev/crypto/vbdev_crypto.c
+        module/bdev/crypto/vbdev_crypto.h
+        module/bdev/crypto/vbdev_crypto_rpc.c
+        module/bdev/delay/vbdev_delay.c
+        module/bdev/delay/vbdev_delay.h
+        module/bdev/delay/vbdev_delay_rpc.c
+        module/bdev/error/vbdev_error.c
+        module/bdev/error/vbdev_error.h
+        module/bdev/error/vbdev_error_rpc.c
+        module/bdev/ftl/bdev_ftl.c
+        module/bdev/ftl/bdev_ftl.h
+        module/bdev/ftl/bdev_ftl_rpc.c
+        module/bdev/gpt/gpt.c
+        module/bdev/gpt/gpt.h
+        module/bdev/gpt/vbdev_gpt.c
+        module/bdev/iscsi/bdev_iscsi.c
+        module/bdev/iscsi/bdev_iscsi.h
+        module/bdev/iscsi/bdev_iscsi_rpc.c
+        module/bdev/lvol/vbdev_lvol.c
+        module/bdev/lvol/vbdev_lvol.h
+        module/bdev/lvol/vbdev_lvol_rpc.c
+        module/bdev/malloc/bdev_malloc.c
+        module/bdev/malloc/bdev_malloc.h
+        module/bdev/malloc/bdev_malloc_rpc.c
+        module/bdev/null/bdev_null.c
+        module/bdev/null/bdev_null.h
+        module/bdev/null/bdev_null_rpc.c
+        module/bdev/nvme/bdev_nvme.c
+        module/bdev/nvme/bdev_nvme.h
+        module/bdev/nvme/bdev_nvme_cuse_rpc.c
+        module/bdev/nvme/bdev_nvme_rpc.c
+        module/bdev/nvme/bdev_ocssd.c
+        module/bdev/nvme/bdev_ocssd.h
+        module/bdev/nvme/bdev_ocssd_rpc.c
+        module/bdev/nvme/common.c
+        module/bdev/nvme/common.h
+        module/bdev/nvme/nvme_rpc.c
+        module/bdev/nvme/vbdev_opal.c
+        module/bdev/nvme/vbdev_opal.h
+        module/bdev/nvme/vbdev_opal_rpc.c
+        module/bdev/ocf/ctx.c
+        module/bdev/ocf/ctx.h
+        module/bdev/ocf/data.c
+        module/bdev/ocf/data.h
+        module/bdev/ocf/stats.c
+        module/bdev/ocf/stats.h
+        module/bdev/ocf/utils.c
+        module/bdev/ocf/utils.h
+        module/bdev/ocf/vbdev_ocf.c
+        module/bdev/ocf/vbdev_ocf.h
+        module/bdev/ocf/vbdev_ocf_rpc.c
+        module/bdev/ocf/volume.c
+        module/bdev/ocf/volume.h
+        module/bdev/passthru/vbdev_passthru.c
+        module/bdev/passthru/vbdev_passthru.h
+        module/bdev/passthru/vbdev_passthru_rpc.c
+        module/bdev/pmem/bdev_pmem.c
+        module/bdev/pmem/bdev_pmem.h
+        module/bdev/pmem/bdev_pmem_rpc.c
+        module/bdev/raid/bdev_raid.c
+        module/bdev/raid/bdev_raid.h
+        module/bdev/raid/bdev_raid_rpc.c
+        module/bdev/raid/raid0.c
+        module/bdev/rbd/bdev_rbd.c
+        module/bdev/rbd/bdev_rbd.h
+        module/bdev/rbd/bdev_rbd_rpc.c
+        module/bdev/rpc/bdev_rpc.c
+        module/bdev/split/vbdev_split.c
+        module/bdev/split/vbdev_split.h
+        module/bdev/split/vbdev_split_rpc.c
+        module/bdev/uring/bdev_uring.c
+        module/bdev/uring/bdev_uring.h
+        module/bdev/uring/bdev_uring_rpc.c
+        module/bdev/virtio/bdev_virtio.h
+        module/bdev/virtio/bdev_virtio_blk.c
+        module/bdev/virtio/bdev_virtio_rpc.c
+        module/bdev/virtio/bdev_virtio_scsi.c
+        module/bdev/zone_block/vbdev_zone_block.c
+        module/bdev/zone_block/vbdev_zone_block.h
+        module/bdev/zone_block/vbdev_zone_block_rpc.c
+        module/blob/bdev/blob_bdev.c
+        module/blobfs/bdev/blobfs_bdev.c
+        module/blobfs/bdev/blobfs_bdev_rpc.c
+        module/blobfs/bdev/blobfs_fuse.c
+        module/blobfs/bdev/blobfs_fuse.h
+        module/copy/ioat/copy_engine_ioat.c
+        module/copy/ioat/copy_engine_ioat.h
+        module/copy/ioat/copy_engine_ioat_rpc.c
+        module/env_dpdk/env_dpdk_rpc.c
+        module/event/rpc/app_rpc.c
+        module/event/rpc/subsystem_rpc.c
+        module/event/subsystems/bdev/bdev.c
+        module/event/subsystems/copy/copy.c
+        module/event/subsystems/iscsi/iscsi.c
+        module/event/subsystems/nbd/nbd.c
+        module/event/subsystems/net/net.c
+        module/event/subsystems/nvmf/conf.c
+        module/event/subsystems/nvmf/event_nvmf.h
+        module/event/subsystems/nvmf/nvmf_rpc.c
+        module/event/subsystems/nvmf/nvmf_tgt.c
+        module/event/subsystems/scsi/scsi.c
+        module/event/subsystems/vhost/vhost.c
+        module/event/subsystems/vmd/event_vmd.h
+        module/event/subsystems/vmd/vmd.c
+        module/event/subsystems/vmd/vmd_rpc.c
+        module/sock/posix/posix.c
+        module/sock/vpp/vpp.c
+        test/app/bdev_svc/bdev_svc.c
+        test/app/fuzz/common/fuzz_common.h
+        test/app/fuzz/nvme_fuzz/nvme_fuzz.c
+        test/app/fuzz/vhost_fuzz/vhost_fuzz.c
+        test/app/fuzz/vhost_fuzz/vhost_fuzz.h
+        test/app/fuzz/vhost_fuzz/vhost_fuzz_rpc.c
+        test/app/histogram_perf/histogram_perf.c
+        test/app/jsoncat/jsoncat.c
+        test/app/stub/stub.c
+        test/bdev/bdevio/bdevio.c
+        test/bdev/bdevperf/bdevperf.c
+        test/blobfs/fuse/fuse.c
+        test/blobfs/mkfs/mkfs.c
+        test/common/lib/nvme/common_stubs.h
+        test/common/lib/test_env.c
+        test/common/lib/test_sock.c
+        test/common/lib/ut_multithread.c
+        test/env/env_dpdk_post_init/env_dpdk_post_init.c
+        test/env/mem_callbacks/mem_callbacks.c
+        test/env/memory/memory_ut.c
+        test/env/pci/pci_ut.c
+        test/env/vtophys/vtophys.c
+        test/event/event_perf/event_perf.c
+        test/event/reactor/reactor.c
+        test/event/reactor_perf/reactor_perf.c
+        test/nvme/aer/aer.c
+        test/nvme/deallocated_value/deallocated_value.c
+        test/nvme/e2edp/nvme_dp.c
+        test/nvme/err_injection/err_injection.c
+        test/nvme/overhead/overhead.c
+        test/nvme/reset/reset.c
+        test/nvme/sgl/sgl.c
+        test/nvme/startup/startup.c
+        test/rpc_client/rpc_client_test.c
+        test/unit/include/spdk/histogram_data.h/histogram_ut.c
+        test/unit/lib/bdev/bdev.c/bdev_ut.c
+        test/unit/lib/bdev/bdev_ocssd.c/bdev_ocssd_ut.c
+        test/unit/lib/bdev/bdev_raid.c/bdev_raid_ut.c
+        test/unit/lib/bdev/bdev_zone.c/bdev_zone_ut.c
+        test/unit/lib/bdev/compress.c/compress_ut.c
+        test/unit/lib/bdev/crypto.c/crypto_ut.c
+        test/unit/lib/bdev/gpt/gpt.c/gpt_ut.c
+        test/unit/lib/bdev/mt/bdev.c/bdev_ut.c
+        test/unit/lib/bdev/part.c/part_ut.c
+        test/unit/lib/bdev/pmem/bdev_pmem_ut.c
+        test/unit/lib/bdev/scsi_nvme.c/scsi_nvme_ut.c
+        test/unit/lib/bdev/vbdev_lvol.c/vbdev_lvol_ut.c
+        test/unit/lib/bdev/vbdev_zone_block.c/vbdev_zone_block_ut.c
+        test/unit/lib/blob/blob.c/blob_ut.c
+        test/unit/lib/blob/bs_dev_common.c
+        test/unit/lib/blob/bs_scheduler.c
+        test/unit/lib/blobfs/blobfs_async_ut/blobfs_async_ut.c
+        test/unit/lib/blobfs/blobfs_bdev.c/blobfs_bdev_ut.c
+        test/unit/lib/blobfs/blobfs_sync_ut/blobfs_sync_ut.c
+        test/unit/lib/blobfs/tree.c/tree_ut.c
+        test/unit/lib/event/app.c/app_ut.c
+        test/unit/lib/event/reactor.c/reactor_ut.c
+        test/unit/lib/event/subsystem.c/subsystem_ut.c
+        test/unit/lib/ftl/common/utils.c
+        test/unit/lib/ftl/ftl_band.c/ftl_band_ut.c
+        test/unit/lib/ftl/ftl_io.c/ftl_io_ut.c
+        test/unit/lib/ftl/ftl_md/ftl_md_ut.c
+        test/unit/lib/ftl/ftl_ppa/ftl_ppa_ut.c
+        test/unit/lib/ftl/ftl_reloc.c/ftl_reloc_ut.c
+        test/unit/lib/ftl/ftl_rwb.c/ftl_rwb_ut.c
+        test/unit/lib/ftl/ftl_wptr/ftl_wptr_ut.c
+        test/unit/lib/ioat/ioat.c/ioat_ut.c
+        test/unit/lib/iscsi/conn.c/conn_ut.c
+        test/unit/lib/iscsi/init_grp.c/init_grp_ut.c
+        test/unit/lib/iscsi/iscsi.c/iscsi_ut.c
+        test/unit/lib/iscsi/param.c/param_ut.c
+        test/unit/lib/iscsi/portal_grp.c/portal_grp_ut.c
+        test/unit/lib/iscsi/tgt_node.c/tgt_node_ut.c
+        test/unit/lib/iscsi/common.c
+        test/unit/lib/json/json_parse.c/json_parse_ut.c
+        test/unit/lib/json/json_util.c/json_util_ut.c
+        test/unit/lib/json/json_write.c/json_write_ut.c
+        test/unit/lib/jsonrpc/jsonrpc_server.c/jsonrpc_server_ut.c
+        test/unit/lib/log/log.c/log_ut.c
+        test/unit/lib/lvol/lvol.c/lvol_ut.c
+        test/unit/lib/notify/notify.c/notify_ut.c
+        test/unit/lib/nvme/nvme.c/nvme_ut.c
+        test/unit/lib/nvme/nvme_ctrlr.c/nvme_ctrlr_ut.c
+        test/unit/lib/nvme/nvme_ctrlr_cmd.c/nvme_ctrlr_cmd_ut.c
+        test/unit/lib/nvme/nvme_ctrlr_ocssd_cmd.c/nvme_ctrlr_ocssd_cmd_ut.c
+        test/unit/lib/nvme/nvme_ns.c/nvme_ns_ut.c
+        test/unit/lib/nvme/nvme_ns_cmd.c/nvme_ns_cmd_ut.c
+        test/unit/lib/nvme/nvme_ns_ocssd_cmd.c/nvme_ns_ocssd_cmd_ut.c
+        test/unit/lib/nvme/nvme_pcie.c/nvme_pcie_ut.c
+        test/unit/lib/nvme/nvme_qpair.c/nvme_qpair_ut.c
+        test/unit/lib/nvme/nvme_quirks.c/nvme_quirks_ut.c
+        test/unit/lib/nvme/nvme_rdma.c/nvme_rdma_ut.c
+        test/unit/lib/nvme/nvme_tcp.c/nvme_tcp_ut.c
+        test/unit/lib/nvme/nvme_uevent.c/nvme_uevent_ut.c
+        test/unit/lib/nvmf/ctrlr.c/ctrlr_ut.c
+        test/unit/lib/nvmf/ctrlr_bdev.c/ctrlr_bdev_ut.c
+        test/unit/lib/nvmf/ctrlr_discovery.c/ctrlr_discovery_ut.c
+        test/unit/lib/nvmf/fc.c/fc_ut.c
+        test/unit/lib/nvmf/fc_ls.c/fc_ls_ut.c
+        test/unit/lib/nvmf/rdma.c/rdma_ut.c
+        test/unit/lib/nvmf/subsystem.c/subsystem_ut.c
+        test/unit/lib/nvmf/tcp.c/tcp_ut.c
+        test/unit/lib/reduce/reduce.c/reduce_ut.c
+        test/unit/lib/scsi/dev.c/dev_ut.c
+        test/unit/lib/scsi/lun.c/lun_ut.c
+        test/unit/lib/scsi/scsi.c/scsi_ut.c
+        test/unit/lib/scsi/scsi_bdev.c/scsi_bdev_ut.c
+        test/unit/lib/scsi/scsi_pr.c/scsi_pr_ut.c
+        test/unit/lib/sock/posix.c/posix_ut.c
+        test/unit/lib/sock/sock.c/sock_ut.c
+        test/unit/lib/thread/thread.c/thread_ut.c
+        test/unit/lib/util/base64.c/base64_ut.c
+        test/unit/lib/util/bit_array.c/bit_array_ut.c
+        test/unit/lib/util/cpuset.c/cpuset_ut.c
+        test/unit/lib/util/crc16.c/crc16_ut.c
+        test/unit/lib/util/crc32_ieee.c/crc32_ieee_ut.c
+        test/unit/lib/util/crc32c.c/crc32c_ut.c
+        test/unit/lib/util/dif.c/dif_ut.c
+        test/unit/lib/util/iov.c/iov_ut.c
+        test/unit/lib/util/pipe.c/pipe_ut.c
+        test/unit/lib/util/string.c/string_ut.c
+        test/unit/lib/vhost/vhost.c/vhost_ut.c
+        test/unit/lib/vhost/test_vhost.c
+        test/unit/lib/json_mock.c
+        test/spdk_cunit.h)
